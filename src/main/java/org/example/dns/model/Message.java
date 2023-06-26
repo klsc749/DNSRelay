@@ -6,8 +6,21 @@ public class Message {
     private Header header;
     private List<Section> sections;
 
+    public Message(){
+
+    }
+
+
     public Message(Header header, List<Section> sections) {
         this.header = header;
+        this.sections = sections;
+    }
+
+    public void setHeader(Header header) {
+        this.header = header;
+    }
+
+    public void setSections(List<Section> sections) {
         this.sections = sections;
     }
 
