@@ -1,4 +1,4 @@
-package org.example.queryHanlder.RemoteServerHandler;
+package org.example.queryHanlder.remoteServerHandler;
 
 import org.example.queryHanlder.DNSQueryHandler;
 import org.example.queryHanlder.model.DNSRecord;
