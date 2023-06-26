@@ -1,4 +1,4 @@
-package org.example.threadPool;
+package org.example.pool.threadPool;
 
 public interface ThreadPool {
         void submit(Runnable task);

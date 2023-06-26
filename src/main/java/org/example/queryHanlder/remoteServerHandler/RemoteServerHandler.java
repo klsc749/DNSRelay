@@ -1,10 +1,11 @@
 package org.example.queryHanlder.remoteServerHandler;
 
-import org.example.datagramSocketPool.DatagramSocketPool;
+import org.example.pool.datagramSocketPool.DatagramSocketPool;
 import org.example.dns.model.*;
 import org.example.dns.sender.DNSQuerySender;
 import org.example.dns.sender.DNSQuerySenderI;
 import org.example.queryHanlder.DNSQueryHandler;
+import org.example.queryHanlder.redisHandler.service.RedisService;
 
 import java.net.DatagramSocket;
 import java.util.ArrayList;
@@ -12,8 +13,11 @@ import java.util.ArrayList;
 public class RemoteServerHandler implements DNSQueryHandler {
     private DNSQueryHandler next;
     private DatagramSocketPool datagramSocketPool;
-    public RemoteServerHandler(DatagramSocketPool datagramSocketPool) {
+
+    private RedisService redisService;
+    public RemoteServerHandler(DatagramSocketPool datagramSocketPool, RedisService redisService) {
         this.datagramSocketPool = datagramSocketPool;
+        this.redisService = redisService;
     }
 
     @Override
@@ -23,6 +27,7 @@ public class RemoteServerHandler implements DNSQueryHandler {
 
     @Override
     public Message handle(Question question) {
+        System.out.println("RemoteServerHandler");
         Message message = new Message();
         Header header = new Header();
         header.setFlags(new Flag());
@@ -48,7 +53,9 @@ public class RemoteServerHandler implements DNSQueryHandler {
             }
         }
 
-        //TODO: update redis
+        RRecord record = (RRecord)response.getSections().get(1);
+
+        redisService.setHostDNS(question.getName(), record.getData(), record.getTtl());
 
         return response;
     }

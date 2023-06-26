@@ -1,5 +1,8 @@
 package org.example.dns.model;
 
+import org.example.pool.redisConnectionPool.RedisConnectionPool;
+import org.example.queryHanlder.redisHandler.model.ValueWithTTL;
+import org.example.queryHanlder.redisHandler.service.RedisService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -34,5 +37,25 @@ public class TypeTest {
         assertEquals(Type.NS, Type.fromBytes(new byte[]{0, 2}));
         assertEquals(Type.CNAME, Type.fromBytes(new byte[]{0, 5}));
         assertEquals(Type.UNKNOWN, Type.fromBytes(new byte[]{0, 0}));
+    }
+
+    @Test
+    public void any(){
+        RedisConnectionPool redisConnectionPool = new RedisConnectionPool();
+        RedisService redisService = new RedisService(redisConnectionPool);
+        redisService.setHostDNS("www.baidu.com", "4545", 5);
+        ValueWithTTL valueWithTTL = redisService.getHostDNS("www.baidu.com");
+        System.out.println(valueWithTTL);
+
+        //wait for 6s
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(redisService.getHostDNS("www.baidu.com"));
+        redisService.setHostDNS("www.baidu.com", "4545", 5);
+        System.out.println(redisService.getHostDNS("www.baidu.com"));
     }
 }

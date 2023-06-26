@@ -1,8 +1,8 @@
 package org.example.dns.resovler;
 
 import org.example.dns.model.Message;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.testng.Assert;
 
 import java.net.UnknownHostException;
 
@@ -18,20 +18,20 @@ public class DNSMessageParserTest {
         DNSMessageParser parser = new DNSMessageParserI();
         Message message = parser.parse(data);
 
-        Assert.assertEquals(message.getHeader().getId(), 2);
-        Assert.assertTrue(message.getHeader().getFlags().isQr());
-        Assert.assertEquals(message.getHeader().getFlags().getOpcode(), 0);
-        Assert.assertFalse(message.getHeader().getFlags().isAa());
-        Assert.assertFalse(message.getHeader().getFlags().isTc());
-        Assert.assertTrue(message.getHeader().getFlags().isRd());
-        Assert.assertTrue(message.getHeader().getFlags().isRa());
-        Assert.assertEquals(message.getHeader().getFlags().getZ(), 0);
-        Assert.assertEquals(message.getHeader().getFlags().getRcode(), 0);
+        Assertions.assertEquals(message.getHeader().getId(), 2);
+        Assertions.assertTrue(message.getHeader().getFlags().isQr());
+        Assertions.assertEquals(message.getHeader().getFlags().getOpcode(), 0);
+        Assertions.assertFalse(message.getHeader().getFlags().isAa());
+        Assertions.assertFalse(message.getHeader().getFlags().isTc());
+        Assertions.assertTrue(message.getHeader().getFlags().isRd());
+        Assertions.assertTrue(message.getHeader().getFlags().isRa());
+        Assertions.assertEquals(message.getHeader().getFlags().getZ(), 0);
+        Assertions.assertEquals(message.getHeader().getFlags().getRcode(), 0);
 
-        Assert.assertEquals(message.getHeader().getQdCount(), 1);
-        Assert.assertEquals(message.getHeader().getAnCount(), 2);
-        Assert.assertEquals(message.getHeader().getNsCount(), 0);
-        Assert.assertEquals(message.getHeader().getArCount(), 0);
+        Assertions.assertEquals(message.getHeader().getQdCount(), 1);
+        Assertions.assertEquals(message.getHeader().getAnCount(), 2);
+        Assertions.assertEquals(message.getHeader().getNsCount(), 0);
+        Assertions.assertEquals(message.getHeader().getArCount(), 0);
     }
 
     @Test
@@ -45,20 +45,20 @@ public class DNSMessageParserTest {
         byte[] serializedData = serializer.serialize(message);
         Message message1 = parser.parse(serializedData);
 
-        Assert.assertEquals(message.getHeader().getId(), message1.getHeader().getId());
-        Assert.assertEquals(message.getHeader().getFlags().isQr(), message1.getHeader().getFlags().isQr());
-        Assert.assertEquals(message.getHeader().getFlags().getOpcode(), message1.getHeader().getFlags().getOpcode());
-        Assert.assertEquals(message.getHeader().getFlags().isAa(), message1.getHeader().getFlags().isAa());
-        Assert.assertEquals(message.getHeader().getFlags().isTc(), message1.getHeader().getFlags().isTc());
-        Assert.assertEquals(message.getHeader().getFlags().isRd(), message1.getHeader().getFlags().isRd());
-        Assert.assertEquals(message.getHeader().getFlags().isRa(), message1.getHeader().getFlags().isRa());
-        Assert.assertEquals(message.getHeader().getFlags().getZ(), message1.getHeader().getFlags().getZ());
-        Assert.assertEquals(message.getHeader().getFlags().getRcode(), message1.getHeader().getFlags().getRcode());
+        Assertions.assertEquals(message.getHeader().getId(), message1.getHeader().getId());
+        Assertions.assertEquals(message.getHeader().getFlags().isQr(), message1.getHeader().getFlags().isQr());
+        Assertions.assertEquals(message.getHeader().getFlags().getOpcode(), message1.getHeader().getFlags().getOpcode());
+        Assertions.assertEquals(message.getHeader().getFlags().isAa(), message1.getHeader().getFlags().isAa());
+        Assertions.assertEquals(message.getHeader().getFlags().isTc(), message1.getHeader().getFlags().isTc());
+        Assertions.assertEquals(message.getHeader().getFlags().isRd(), message1.getHeader().getFlags().isRd());
+        Assertions.assertEquals(message.getHeader().getFlags().isRa(), message1.getHeader().getFlags().isRa());
+        Assertions.assertEquals(message.getHeader().getFlags().getZ(), message1.getHeader().getFlags().getZ());
+        Assertions.assertEquals(message.getHeader().getFlags().getRcode(), message1.getHeader().getFlags().getRcode());
 
-        Assert.assertEquals(message.getHeader().getQdCount(), message1.getHeader().getQdCount());
-        Assert.assertEquals(message.getHeader().getAnCount(), message1.getHeader().getAnCount());
-        Assert.assertEquals(message.getHeader().getNsCount(), message1.getHeader().getNsCount());
-        Assert.assertEquals(message.getHeader().getArCount(), message1.getHeader().getArCount());
+        Assertions.assertEquals(message.getHeader().getQdCount(), message1.getHeader().getQdCount());
+        Assertions.assertEquals(message.getHeader().getAnCount(), message1.getHeader().getAnCount());
+        Assertions.assertEquals(message.getHeader().getNsCount(), message1.getHeader().getNsCount());
+        Assertions.assertEquals(message.getHeader().getArCount(), message1.getHeader().getArCount());
 
 
     }

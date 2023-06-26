@@ -1,4 +1,4 @@
-package org.example.datagramSocketPool;
+package org.example.pool.datagramSocketPool;
 
 import java.net.DatagramSocket;
 import java.util.concurrent.ArrayBlockingQueue;
