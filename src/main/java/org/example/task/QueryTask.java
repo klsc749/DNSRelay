@@ -33,11 +33,12 @@ public class QueryTask implements Runnable{
         if(result == null){
             return;
         }
-
+        System.out.println("result: " + result);
+        result.getHeader().setId(message.getHeader().getId());
         DatagramSocket datagramSocket = null;
         try {
             datagramSocket = datagramSocketPool.getDatagramSocket();
-            DNSQuerySenderHelper.sendBack(result, datagramSocket, packet.getAddress(), packet.getPort());
+            DNSQuerySenderHelper.sendBack(result, packet.getAddress(), packet.getPort());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }finally{

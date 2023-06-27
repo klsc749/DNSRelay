@@ -20,7 +20,6 @@ public class RedisHandler implements DNSQueryHandler {
 
     @Override
     public Message handle(Question question) {
-        System.out.println("RedisHandler");
         String host = question.getName();
         ValueWithTTL result = redisService.getHostDNS(host);
         if(result != null && result.getValue() != null && result.getTtl() > 0){
@@ -43,7 +42,7 @@ public class RedisHandler implements DNSQueryHandler {
             rRecord.setDataLength(4);
             rRecord.setData(result.getValue());
             sections.add(rRecord);
-
+            System.out.println("redis result: " + message);
             return message;
         }
         return next == null ? null : next.handle(question);

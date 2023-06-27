@@ -28,7 +28,6 @@ public class RemoteServerHandler implements DNSQueryHandler {
 
     @Override
     public Message handle(Question question) {
-        System.out.println("RemoteServerHandler");
         Message message = new Message();
         Header header = new Header();
         header.setFlags(new Flag());
@@ -56,9 +55,18 @@ public class RemoteServerHandler implements DNSQueryHandler {
             return next == null ? null : next.handle(question);
         }
 
-        RRecord record = (RRecord)response.getSections().get(1);
+        for(Section section : response.getSections()){
+            if(section instanceof RRecord){
+                RRecord record = (RRecord) section;
+                System.out.println(record);
+                if(record.getType() == Type.A){
+                    redisService.setHostDNS(question.getName(), record.getData(), record.getTtl());
+                    break;
+                }
+            }
+        }
 
-        redisService.setHostDNS(question.getName(), record.getData(), record.getTtl());
+        System.out.println("remote result: " + response);
 
         return response;
     }

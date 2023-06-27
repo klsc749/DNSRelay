@@ -16,8 +16,8 @@ public class DNSListenerI implements DNSListener{
     private ThreadPool threadPool;
     private QueryTaskFactory queryTaskFactory;
 
-    public DNSListenerI(ThreadPool threadPool, QueryTaskFactory queryTaskFactory) throws SocketException {
-        this.datagramSocket = new DatagramSocket(SystemConfig.LOCAL_DNS_PORT);
+    public DNSListenerI(ThreadPool threadPool, QueryTaskFactory queryTaskFactory, DatagramSocket socket) throws SocketException {
+        this.datagramSocket = socket;
         this.threadPool = threadPool;
         this.queryTaskFactory = queryTaskFactory;
     }
@@ -29,7 +29,6 @@ public class DNSListenerI implements DNSListener{
         while (true) {
             try {
                 datagramSocket.receive(packet);
-                System.out.println("收到请求");
 
                 threadPool.submit(queryTaskFactory.createQueryTask(packet));
             } catch (IOException e) {
@@ -37,4 +36,5 @@ public class DNSListenerI implements DNSListener{
             }
         }
     }
+
 }

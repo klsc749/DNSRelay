@@ -9,11 +9,16 @@ public class DatagramSocketPoolI implements DatagramSocketPool{
 
     public DatagramSocketPoolI(int poolSize) {
         pool = new ArrayBlockingQueue<>(poolSize);
+        int startPort = 30000;
         for (int i = 0; i < poolSize; i++) {
             try {
-                pool.add(new DatagramSocket());
+                int port = startPort + i;
+                if (port > 31000) {
+                    throw new RuntimeException("Not enough ports in the range 30000-31000 for the requested pool size");
+                }
+                pool.add(new DatagramSocket(port));
             } catch (Exception e) {
-                throw new RuntimeException("Could not create DatagramSocket", e);
+                throw new RuntimeException("Could not create DatagramSocket on port " + (startPort + i), e);
             }
         }
     }

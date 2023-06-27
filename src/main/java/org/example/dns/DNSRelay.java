@@ -1,7 +1,9 @@
 package org.example.dns;
 
+import org.example.config.SystemConfig;
 import org.example.dns.receiver.DNSListener;
 import org.example.dns.receiver.DNSListenerI;
+import org.example.dns.sender.DNSQuerySenderHelper;
 import org.example.pool.datagramSocketPool.DatagramSocketPool;
 import org.example.pool.datagramSocketPool.DatagramSocketPoolI;
 import org.example.pool.redisConnectionPool.RedisConnectionPool;
@@ -14,6 +16,8 @@ import org.example.queryHanlder.redisHandler.service.RedisService;
 import org.example.queryHanlder.remoteServerHandler.RemoteServerHandler;
 import org.example.task.QueryTaskFactory;
 
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 
 public class DNSRelay {
@@ -24,6 +28,8 @@ public class DNSRelay {
     private DNSQueryHandler dnsQueryHandler;
     private QueryTaskFactory queryTaskFactory;
     private DNSListener dnsListener;
+
+    private DatagramSocket listenerSocket;
 
     public DNSRelay() throws SocketException {
         redisConnectionPool = new RedisConnectionPool();
@@ -40,7 +46,10 @@ public class DNSRelay {
 
         queryTaskFactory = new QueryTaskFactory(dnsQueryHandler, datagramSocketPool);
         threadPool = new ThreadPoolI(10);
-        dnsListener = new DNSListenerI(threadPool, queryTaskFactory);
+        InetSocketAddress address = new InetSocketAddress("0.0.0.0", SystemConfig.LOCAL_DNS_PORT);
+        listenerSocket = new DatagramSocket(address);
+        dnsListener = new DNSListenerI(threadPool, queryTaskFactory, listenerSocket);
+        DNSQuerySenderHelper.setSendSocket(listenerSocket);
     }
 
     public void start(){

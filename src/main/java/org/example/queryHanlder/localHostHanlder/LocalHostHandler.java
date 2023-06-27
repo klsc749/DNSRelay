@@ -25,7 +25,7 @@ public class LocalHostHandler implements DNSQueryHandler {
             for (String line : lines) {
                 String[] parts = line.split(" ");
                 if (parts.length == 2) {
-                    this.localHostMap.put(parts[0], parts[1]);
+                    this.localHostMap.put(parts[0]+".", parts[1]);
                 }
             }
 
@@ -36,7 +36,6 @@ public class LocalHostHandler implements DNSQueryHandler {
 
     @Override
     public Message handle(Question question) {
-
         String s = localHostMap.get(question.getName());
 
         // 从localHostMap中查询
@@ -55,7 +54,7 @@ public class LocalHostHandler implements DNSQueryHandler {
         message.setSections(sections);
         sections.add(question);
 
-        if(s.equals("0.0.0.0")){
+        if("0.0.0.0".equals(s)){
             header.getFlags().setRcode(3);
             header.setAnCount(0);
         }else {
@@ -68,6 +67,8 @@ public class LocalHostHandler implements DNSQueryHandler {
             rRecord.setData(s);
             sections.add(rRecord);
         }
+
+        System.out.println("local result: " + message);
 
         return message;
     }
