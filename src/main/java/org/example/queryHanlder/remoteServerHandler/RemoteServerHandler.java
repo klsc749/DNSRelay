@@ -1,5 +1,6 @@
 package org.example.queryHanlder.remoteServerHandler;
 
+import org.example.dns.sender.DNSQuerySenderHelper;
 import org.example.pool.datagramSocketPool.DatagramSocketPool;
 import org.example.dns.model.*;
 import org.example.dns.sender.DNSQuerySender;
@@ -37,13 +38,11 @@ public class RemoteServerHandler implements DNSQueryHandler {
         message.setSections(new ArrayList<>());
         message.getSections().add(question);
 
-        DNSQuerySender sender = new DNSQuerySenderI();
-
         Message response;
         DatagramSocket socket = null;
         try{
             socket = datagramSocketPool.getDatagramSocket();
-            response = sender.sendQuery(message, socket);
+            response = DNSQuerySenderHelper.sendQuery(message, socket);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -51,6 +50,10 @@ public class RemoteServerHandler implements DNSQueryHandler {
             if(socket != null){
                 datagramSocketPool.returnDatagramSocket(socket);
             }
+        }
+
+        if(response == null){
+            return next == null ? null : next.handle(question);
         }
 
         RRecord record = (RRecord)response.getSections().get(1);

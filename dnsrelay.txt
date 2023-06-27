@@ -1,2 +1,1 @@
-www.google.com 142.251.43.14
-www.baidu.com 0.0.0.0
+www.google.com 0.0.0.0
