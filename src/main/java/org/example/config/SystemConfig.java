@@ -7,4 +7,6 @@ public class SystemConfig {
     public static final String DNS_RELAY = "dnsrelay.txt";
 
     public static final int LOCAL_DNS_PORT = 53;
+
+    public static final boolean ENABLE_DEBUG = true;
 }
