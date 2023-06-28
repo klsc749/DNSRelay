@@ -6,5 +6,5 @@ public class SystemConfig {
 
     public static final String DNS_RELAY = "dnsrelay.txt";
 
-    public static final int LOCAL_DNS_PORT = 10043;
+    public static final int LOCAL_DNS_PORT = 53;
 }

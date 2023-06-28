@@ -11,7 +11,7 @@ import java.util.List;
 public class RedisHandler implements DNSQueryHandler {
     private DNSQueryHandler next;
 
-    private RedisService redisService;
+    private final RedisService redisService;
 
     public RedisHandler(RedisService redisService){
         this.redisService = redisService;
@@ -42,7 +42,6 @@ public class RedisHandler implements DNSQueryHandler {
             rRecord.setDataLength(4);
             rRecord.setData(result.getValue());
             sections.add(rRecord);
-            System.out.println("redis result: " + message);
             return message;
         }
         return next == null ? null : next.handle(question);

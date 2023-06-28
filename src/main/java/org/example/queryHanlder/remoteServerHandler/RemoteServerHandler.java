@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 public class RemoteServerHandler implements DNSQueryHandler {
     private DNSQueryHandler next;
-    private DatagramSocketPool datagramSocketPool;
+    private final DatagramSocketPool datagramSocketPool;
 
-    private RedisService redisService;
+    private final RedisService redisService;
     public RemoteServerHandler(DatagramSocketPool datagramSocketPool, RedisService redisService) {
         this.datagramSocketPool = datagramSocketPool;
         this.redisService = redisService;
@@ -66,7 +66,6 @@ public class RemoteServerHandler implements DNSQueryHandler {
             }
         }
 
-        System.out.println("remote result: " + response);
 
         return response;
     }

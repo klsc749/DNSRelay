@@ -82,12 +82,12 @@ public class DNSMessageSerializerI implements DNSMessageSerializer{
 
     private void serializeData(ByteBuffer buffer, Type type, String data) throws UnknownHostException {
         switch (type) {
-            case A:
+            case A, AAAA:
                 // Convert IP address to bytes
                 byte[] ipBytes = InetAddress.getByName(data).getAddress();
                 buffer.put(ipBytes);
                 break;
-            case CNAME:
+            case CNAME, SOA:
                 // Convert domain name to bytes
                 serializeName(buffer, data);
                 break;

@@ -108,7 +108,8 @@ public class DNSMessageParserI implements DNSMessageParser{
     private String parseData(ByteBuffer buffer, Type type, int dataLength) {
         switch (type) {
             case A:
-                byte[] ipBytes = new byte[4];
+            case AAAA:
+                byte[] ipBytes = new byte[dataLength];
                 buffer.get(ipBytes);
                 try {
                     return InetAddress.getByAddress(ipBytes).getHostAddress();
