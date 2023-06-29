@@ -2,62 +2,25 @@ package org.example.config.changeConfig;
 import org.example.config.SystemConfig;
 
 public class InputValidator {
-    private final String[] args;
-
-    public InputValidator(String[] args) {
-        this.args = args;
+    public static boolean validateIP(String ipValue) {
+        // 验证IPv4地址格式
+        String ipPattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
+        return ipValue.matches(ipPattern);
     }
 
-    public boolean isValidInput() {
-        if (isValidIpAddress(args[0]) && isValidPort(args[1]) && isValidFileName(args[2]) && isValidPort(args[3]) && isValidBoolean(args[4])) {
-            return true;
-        }
-        return false;
+    public static boolean validatePort(String portValue) {
+        // 验证端口范围
+        int port = Integer.parseInt(portValue);
+        return port >= 1 && port <= 65535;
     }
 
-    // 校验IP地址是否合法
-    private boolean isValidIpAddress(String ip) {
-        String[] parts = ip.split("\\.");
-
-        if (parts.length != 4) {
-            return false;
-        }
-
-        for (String part : parts) {
-            int num;
-            try {
-                num = Integer.parseInt(part);
-            } catch (NumberFormatException e) {
-                return false;
-            }
-
-            if (num < 0 || num > 255) {
-                return false;
-            }
-        }
-
-        return true;
+    public static boolean validateDNSRelay(String relayValue) {
+        // 验证文件名后缀为.txt
+        return relayValue.endsWith(".txt");
     }
 
-    // 校验端口号是否合法
-    private boolean isValidPort(String port) {
-        int num;
-        try {
-            num = Integer.parseInt(port);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-        return num >= 1 && num <= 65535;
-    }
-
-    // 校验文件名是否合法
-    private boolean isValidFileName(String fileName) {
-        return fileName.endsWith(".txt");
-    }
-
-    // 校验布尔值是否合法
-    private boolean isValidBoolean(String value) {
-        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+    public static boolean validateBoolean(String boolValue) {
+        // 验证布尔值
+        return boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("false");
     }
 }
