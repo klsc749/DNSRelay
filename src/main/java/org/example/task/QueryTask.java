@@ -1,5 +1,6 @@
 package org.example.task;
 
+import org.example.config.SystemConfig;
 import org.example.dns.model.Question;
 import org.example.dns.model.Message;
 import org.example.dns.resovler.DNSMessageParser;
@@ -29,16 +30,27 @@ public class QueryTask implements Runnable{
         DNSMessageParser parser = new DNSMessageParserI();
         Message message = parser.parse(packet.getData());
         Question question = (Question) message.getSections().get(0);
+
+        if(SystemConfig.ENABLE_DEBUG){
+            System.out.println(Thread.currentThread().getName() + " QueryTask handle " + question.getName());
+        }
+
         Message result = handler.handle(question);
         if(result == null){
             return;
         }
-        System.out.println("result: " + result);
         result.getHeader().setId(message.getHeader().getId());
+        result.getHeader().getFlags().setRd(message.getHeader().getFlags().isRd());
         DatagramSocket datagramSocket = null;
         try {
             datagramSocket = datagramSocketPool.getDatagramSocket();
+            if(SystemConfig.ENABLE_DEBUG){
+                System.out.println(Thread.currentThread().getName() + " QueryTask sendBack to " + packet.getAddress() + ":" + packet.getPort() + " Response : " + result);
+            }
             DNSQuerySenderHelper.sendBack(result, packet.getAddress(), packet.getPort());
+            if(SystemConfig.ENABLE_DEBUG){
+                System.out.println(Thread.currentThread().getName() + " QueryTask sendBack Complete");
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }finally{

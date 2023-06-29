@@ -107,8 +107,7 @@ public class DNSMessageParserI implements DNSMessageParser{
     // 这个方法用来从buffer中解析数据
     private String parseData(ByteBuffer buffer, Type type, int dataLength) {
         switch (type) {
-            case A:
-            case AAAA:
+            case A, AAAA:
                 byte[] ipBytes = new byte[dataLength];
                 buffer.get(ipBytes);
                 try {
@@ -116,7 +115,7 @@ public class DNSMessageParserI implements DNSMessageParser{
                 } catch (UnknownHostException e) {
                     throw new RuntimeException(e);
                 }
-            case CNAME:
+            case CNAME, NS, PTR, SOA, MX, TXT, SRV:
                 return parseName(buffer);
             default:
                 byte[] dataBytes = new byte[dataLength];

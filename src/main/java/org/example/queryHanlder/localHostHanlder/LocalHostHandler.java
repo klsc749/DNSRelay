@@ -36,6 +36,9 @@ public class LocalHostHandler implements DNSQueryHandler {
 
     @Override
     public Message handle(Question question) {
+        if(SystemConfig.ENABLE_DEBUG){
+            System.out.println(Thread.currentThread().getName() + " LocalHostHandler handle " + question.getName());
+        }
         String s = localHostMap.get(question.getName());
 
         // 从localHostMap中查询
@@ -62,13 +65,16 @@ public class LocalHostHandler implements DNSQueryHandler {
             RRecord rRecord = new RRecord();
             rRecord.setName(question.getName());
             rRecord.setType(question.getType());
+            rRecord.setClassCode(1);
             rRecord.setTtl(100);
             rRecord.setDataLength(4);
             rRecord.setData(s);
             sections.add(rRecord);
         }
 
-        System.out.println("local result: " + message);
+        if(SystemConfig.ENABLE_DEBUG){
+            System.out.println(Thread.currentThread().getName() + " LocalHostHandler handle " + question.getName() + " result " + s);
+        }
 
         return message;
     }

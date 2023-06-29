@@ -1,5 +1,6 @@
 package org.example.queryHanlder.remoteServerHandler;
 
+import org.example.config.SystemConfig;
 import org.example.dns.sender.DNSQuerySenderHelper;
 import org.example.pool.datagramSocketPool.DatagramSocketPool;
 import org.example.dns.model.*;
@@ -28,6 +29,11 @@ public class RemoteServerHandler implements DNSQueryHandler {
 
     @Override
     public Message handle(Question question) {
+
+        if(SystemConfig.ENABLE_DEBUG){
+            System.out.println(Thread.currentThread().getName() + " RemoteServerHandler handle " + question.getName());
+        }
+
         Message message = new Message();
         Header header = new Header();
         header.setFlags(new Flag());
@@ -58,12 +64,15 @@ public class RemoteServerHandler implements DNSQueryHandler {
         for(Section section : response.getSections()){
             if(section instanceof RRecord){
                 RRecord record = (RRecord) section;
-                System.out.println(record);
                 if(record.getType() == Type.A){
                     redisService.setHostDNS(question.getName(), record.getData(), record.getTtl());
                     break;
                 }
             }
+        }
+
+        if(SystemConfig.ENABLE_DEBUG){
+            System.out.println(Thread.currentThread().getName() + " RemoteServerHandler handle " + question.getName() + " result " + response);
         }
 
 

@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 public class DNSMessageSerializerI implements DNSMessageSerializer{
     @Override
     public byte[] serialize(Message message) throws UnknownHostException {
-        ByteBuffer buffer = ByteBuffer.allocate(512);
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         // Serialize header
@@ -87,7 +87,7 @@ public class DNSMessageSerializerI implements DNSMessageSerializer{
                 byte[] ipBytes = InetAddress.getByName(data).getAddress();
                 buffer.put(ipBytes);
                 break;
-            case CNAME, SOA:
+            case CNAME, NS, PTR, SOA, MX, TXT, SRV:
                 // Convert domain name to bytes
                 serializeName(buffer, data);
                 break;

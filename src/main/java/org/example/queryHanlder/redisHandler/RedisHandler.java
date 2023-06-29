@@ -1,5 +1,6 @@
 package org.example.queryHanlder.redisHandler;
 
+import org.example.config.SystemConfig;
 import org.example.dns.model.*;
 import org.example.queryHanlder.DNSQueryHandler;
 import org.example.queryHanlder.redisHandler.model.ValueWithTTL;
@@ -20,6 +21,11 @@ public class RedisHandler implements DNSQueryHandler {
 
     @Override
     public Message handle(Question question) {
+
+        if(SystemConfig.ENABLE_DEBUG){
+            System.out.println(Thread.currentThread().getName() + " RedisHandler handle " + question.getName());
+        }
+
         String host = question.getName();
         ValueWithTTL result = redisService.getHostDNS(host);
         if(result != null && result.getValue() != null && result.getTtl() > 0){
@@ -42,6 +48,11 @@ public class RedisHandler implements DNSQueryHandler {
             rRecord.setDataLength(4);
             rRecord.setData(result.getValue());
             sections.add(rRecord);
+
+            if(SystemConfig.ENABLE_DEBUG){
+                System.out.println(Thread.currentThread().getName() + " RedisHandler handle " + question.getName() + " result " + result.getValue());
+            }
+
             return message;
         }
         return next == null ? null : next.handle(question);
