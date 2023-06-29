@@ -8,5 +8,5 @@ public class SystemConfig {
 
     public static int LOCAL_DNS_PORT = 53;
 
-    public static boolean ENABLE_DEBUG = true;
+    public static boolean ENABLE_DEBUG = false;
 }

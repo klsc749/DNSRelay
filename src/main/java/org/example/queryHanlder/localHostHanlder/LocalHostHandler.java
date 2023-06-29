@@ -57,10 +57,16 @@ public class LocalHostHandler implements DNSQueryHandler {
         message.setSections(sections);
         sections.add(question);
 
+        if(question.getName().equals("toggleDebug.")){
+            SystemConfig.ENABLE_DEBUG = !SystemConfig.ENABLE_DEBUG;
+            System.out.println(SystemConfig.ENABLE_DEBUG ? "Enable Debug" : "Disable Debug");
+        }
+
         if("0.0.0.0".equals(s)){
             header.getFlags().setRcode(3);
             header.setAnCount(0);
-        }else {
+        }
+        else {
             header.setAnCount(1);
             RRecord rRecord = new RRecord();
             rRecord.setName(question.getName());
